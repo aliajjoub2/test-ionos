@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Testing GitHub Updates
+Plugin Name: Hello-Ali
 Author: Test Doe
 Author URI: https://example.com
 Update URI: https://example.com
