@@ -119,31 +119,65 @@ add_filter('plugin_row_meta', function ($plugin_meta, $plugin_file, $plugin_data
     return $plugin_meta;
 }, 10, 3);
 
+// Add custom row below the plugin
 add_action('after_plugin_row', function ($plugin_file, $plugin_data, $status) {
     if ($plugin_file === plugin_basename(__FILE__) && current_user_can('install_plugins')) {
-        // Define the update data
+        // Plugin details
         $update_data = [
-            "version" => "1.0.1",
-            "tested"  => "6.3.2",
-            "package" => "https://github.com/aliajjoub2/test-ionos/blob/main/test-ionos.zip",
+            "version"   => "1.0.1",
+            "tested"    => "6.3.2",
+            "package"   => "https://github.com/aliajjoub2/test-ionos/blob/main/test-ionos.zip",
+            "details"   => "This update includes several new features, performance improvements, and bug fixes.",
+            "changelog" => "1. Added new functionality.\n2. Fixed compatibility with WordPress 6.3.2.\n3. Improved performance for large sites.",
         ];
 
-        // Get the current plugin version
-        $current_version = $plugin_data['Version'];
-
-        // Check if a new version is available
-        if (version_compare($current_version, $update_data['version'], '<')) {
-            echo sprintf(
-                '<tr class="plugin-update-tr active">
-                    <td colspan="3" style="background-color: #FFF3CD; border-left: 4px solid #FF5722; padding: 10px;">
-                        <strong style="color: #856404;">%s</strong>
+        echo sprintf(
+            '<tr class="plugin-update-tr">
+                <td colspan="3">
+                    <div style="background-color: #e9f6fc; border: 1px solid #0073aa; padding: 10px;">
+                        <strong style="color: #0073aa;">%s</strong>
+                        <p>%s</p>
                         <a href="%s" style="color: #0073aa; font-weight: bold;">%s</a>
-                    </td>
-                </tr>',
-                sprintf(__('Update Available: Version %s (Tested up to WordPress %s)'), $update_data['version'], $update_data['tested']),
-                $update_data['package'],
-                __('Update Now')
-            );
-        }
+                        <a href="#" class="show-details-link" style="margin-left: 15px; color: #0073aa; text-decoration: underline;">%s</a>
+                        <div class="plugin-details-content" style="display: none; margin-top: 10px; background: #f7f7f7; border: 1px solid #ccc; padding: 10px;">
+                            <h4 style="margin-top: 0;">%s</h4>
+                            <p>%s</p>
+                            <pre style="background: #eee; padding: 10px; overflow-x: auto;">%s</pre>
+                        </div>
+                    </div>
+                </td>
+            </tr>',
+            __('Update Available: Version 1.0.1'),
+            sprintf(__('Tested up to WordPress %s.'), $update_data['tested']),
+            $update_data['package'],
+            __('Update Now'),
+            __('Show Details'),
+            __('Plugin Update Details'),
+            $update_data['details'],
+            $update_data['changelog']
+        );
     }
 }, 10, 3);
+
+// Enqueue JavaScript to handle the "Show Details" toggle
+add_action('admin_footer', function () {
+    ?>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.show-details-link').forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const details = this.nextElementSibling;
+                    if (details.style.display === 'none' || details.style.display === '') {
+                        details.style.display = 'block';
+                        this.textContent = 'Hide Details';
+                    } else {
+                        details.style.display = 'none';
+                        this.textContent = 'Show Details';
+                    }
+                });
+            });
+        });
+    </script>
+    <?php
+});
