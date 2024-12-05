@@ -118,3 +118,32 @@ add_filter('plugin_row_meta', function ($plugin_meta, $plugin_file, $plugin_data
 
     return $plugin_meta;
 }, 10, 3);
+
+add_action('after_plugin_row', function ($plugin_file, $plugin_data, $status) {
+    if ($plugin_file === plugin_basename(__FILE__) && current_user_can('install_plugins')) {
+        // Define the update data
+        $update_data = [
+            "version" => "1.0.1",
+            "tested"  => "6.3.2",
+            "package" => "https://github.com/aliajjoub2/test-ionos/blob/main/test-ionos.zip",
+        ];
+
+        // Get the current plugin version
+        $current_version = $plugin_data['Version'];
+
+        // Check if a new version is available
+        if (version_compare($current_version, $update_data['version'], '<')) {
+            echo sprintf(
+                '<tr class="plugin-update-tr active">
+                    <td colspan="3" style="background-color: #FFF3CD; border-left: 4px solid #FF5722; padding: 10px;">
+                        <strong style="color: #856404;">%s</strong>
+                        <a href="%s" style="color: #0073aa; font-weight: bold;">%s</a>
+                    </td>
+                </tr>',
+                sprintf(__('Update Available: Version %s (Tested up to WordPress %s)'), $update_data['version'], $update_data['tested']),
+                $update_data['package'],
+                __('Update Now')
+            );
+        }
+    }
+}, 10, 3);
