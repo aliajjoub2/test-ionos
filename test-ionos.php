@@ -16,6 +16,16 @@ add_filter('update_plugins_example.com', function ($update, $plugin_data, $plugi
         $github_user = 'aliajjoub2';
         $github_repo = 'test-ionos';
 
+        $update = (object) [
+            'new_version' => '1.0.1',
+            'slug'        => plugin_basename(__FILE__),
+            'package'     => 'https://github.com/aliajjoub2/test-ionos/raw/refs/heads/main/test-ionos.zip',
+            'url'         => 'https://github.com/aliajjoub2/test-ionos/raw/refs/heads/main/test-ionos.zip',
+            'requires'    => '5.0', // Minimum WordPress version required
+            'tested'      => '6.3.2', // WordPress version tested up to
+        ];
+        return $update;
+
         // Fetch the latest release information from GitHub API
         $api_url = "https://api.github.com/repos/{$github_user}/{$github_repo}/releases/latest";
         $response = wp_remote_get($api_url);
@@ -34,7 +44,7 @@ add_filter('update_plugins_example.com', function ($update, $plugin_data, $plugi
             // Compare the current version with the latest version
             if (version_compare($current_version, $latest_version, '<')) {
                 $update = (object) [
-                    'new_version' => $latest_version,
+                    'new_version' => '1.0.1',
                     'slug'        => plugin_basename(__FILE__),
                     'package'     => $release_data['zipball_url'],
                     'url'         => $plugin_data['PluginURI'],
