@@ -10,53 +10,33 @@ Version: 1.0.0
 */
 
 // Add the update check functionality
-add_filter('pre_set_site_transient_update_plugins', function ($update, $plugin_data, $plugin_file, $locales) {
-    if ($plugin_file == plugin_basename(__FILE__)) {
-        // GitHub repository information
-        $github_user = 'aliajjoub2';
-        $github_repo = 'test-ionos';
+add_filter('pre_set_site_transient_update_plugins', function ($transient) {
+    // Check if plugin update data is empty
+    if (empty($transient->checked)) {
+        return $transient;
+    }
 
-        $update = (object) [
-            'new_version' => '1.0.1',
-            'slug'        => plugin_basename(__FILE__),
-            'package'     => 'https://github.com/aliajjoub2/test-ionos/raw/refs/heads/main/test-ionos.zip',
-            'url'         => 'https://github.com/aliajjoub2/test-ionos/raw/refs/heads/main/test-ionos.zip',
+    // Plugin information
+    $plugin_slug = 'test-ionos/test-ionos.php'; // Relative path to the plugin file
+    $current_version = '1.0.0'; // Current plugin version
+    $new_version = '1.0.1'; // New plugin version to test
+    $package_url = 'https://github.com/aliajjoub2/test-ionos/raw/refs/heads/main/test-ionos.zip'; // Local URL to the update package
+
+    // Check if a newer version is available
+    if (version_compare($current_version, $new_version, '<')) {
+        $transient->response[$plugin_slug] = (object)[
+            'new_version' => $new_version,
+            'slug'        => $plugin_slug,
+            'package'     => $package_url, // URL to the zip file
+            'url'         => 'http://localhost/test-ionos', // Optional: Local page with plugin details
             'requires'    => '5.0', // Minimum WordPress version required
             'tested'      => '6.3.2', // WordPress version tested up to
         ];
-        return $update;
-
-        // Fetch the latest release information from GitHub API
-        // $api_url = "https://api.github.com/repos/{$github_user}/{$github_repo}";
-        // $response = wp_remote_get($api_url);
-
-        // if (is_wp_error($response)) {
-        //     return $update; // Return existing update data if there's an error
-        // }
-
-        // $release_data = json_decode(wp_remote_retrieve_body($response), true);
-
-        // Ensure the response contains the required data
-        // if (!empty($release_data['tag_name']) && !empty($release_data['zipball_url'])) {
-        //     $latest_version = $release_data['tag_name'];
-        //     $current_version = $plugin_data['Version'];
-
-        //     // Compare the current version with the latest version
-        //     if (version_compare($current_version, $latest_version, '<')) {
-        //         $update = (object) [
-        //             'new_version' => '1.0.1',
-        //             'slug'        => plugin_basename(__FILE__),
-        //             'package'     => $release_data['zipball_url'],
-        //             'url'         => $plugin_data['PluginURI'],
-        //             'requires'    => '5.0', // Minimum WordPress version required
-        //             'tested'      => '6.3.2', // WordPress version tested up to
-        //         ];
-        //     }
-        // }
     }
 
-    // return $update;
-}, 10, 4);
+    return $transient;
+});
+
 
 /*
 Replace "View details" link to point to the GitHub repository.
