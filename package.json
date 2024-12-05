@@ -1,0 +1,22 @@
+{
+  "name": "test-ionos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aliajjoub2/test-ionos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aliajjoub2/test-ionos/issues"
+  },
+  "homepage": "https://github.com/aliajjoub2/test-ionos#readme",
+  "dependencies" : { 
+    "@wordpress/env" : "10.13.0"
+  }
+}

@@ -13,8 +13,8 @@ https://gist.github.com/CruelDrool/4cc70b819a33793396456c5ddb81781d
 add_filter('update_plugins_example.com', function ($update, $plugin_data, $plugin_file, $locales) {
     if ($plugin_file == plugin_basename(__FILE__)) {
         // GitHub repository information
-        $github_user = 'CruelDrool';
-        $github_repo = '4cc70b819a33793396456c5ddb81781d';
+        $github_user = 'aliajjoub2';
+        $github_repo = 'test-ionos';
 
         // Fetch the latest release information from GitHub API
         $api_url = "https://api.github.com/repos/{$github_user}/{$github_repo}/releases/latest";
