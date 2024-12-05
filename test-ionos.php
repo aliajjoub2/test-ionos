@@ -8,9 +8,9 @@ Plugin URI: https://ionos.de
 Description: This is a test plugin to test updates from GitHub.
 Version: 1.0.0
 */
-https://gist.github.com/CruelDrool/4cc70b819a33793396456c5ddb81781d
+
 // Add the update check functionality
-add_filter('update_plugins_example.com', function ($update, $plugin_data, $plugin_file, $locales) {
+add_filter('pre_set_site_transient_update_plugins', function ($update, $plugin_data, $plugin_file, $locales) {
     if ($plugin_file == plugin_basename(__FILE__)) {
         // GitHub repository information
         $github_user = 'aliajjoub2';
